@@ -1,0 +1,24 @@
+Difference entre Matcher et Visitor : on voit bien que y'a moins de ligne de code pour le Matcher (on devrai detailler ça dans le rapport):
+
+https://eli.thegreenplace.net/2014/07/29/ast-matchers-and-clang-refactoring-tools
+
+Exemple de Matcher :
+
+https://github.com/thegameg/cast-matcher
+
+Comment utiliser les ast Matcher (page 9)
+
+https://docs.google.com/document/d/1oTkVLhCdRJUEH1_LDaQdXqe8-aOqT5GLDL9e4MhoFF8/edit#heading=h.sa6jil8n9n6w
+
+Exemple trouver une double boucle for :
+
+https://stackoverflow.com/questions/36880574/finding-nested-loops-with-clang-ast-statementmatcher
+
+définition de ce que c'est que LLVM (pour le rapport):
+
+https://www.scriptol.fr/programmation/llvm.php
+
+Toutes les fonctions de l'ast Matcher
+
+http://releases.llvm.org/3.5.0/tools/clang/docs/LibASTMatchersReference.html
+
