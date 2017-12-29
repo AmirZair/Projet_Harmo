@@ -1,0 +1,19 @@
+# Ignore build executables
+build/
+*.pyc
+*.dot
+
+# Ignore librairies
+libs/
+
+# Ignore output files
+output/
+
+# Ignore IDE and text editors
+.vscode
+
+# Ignore vagrant
+.vagrant
+
+# Ignore log files
+*.log
