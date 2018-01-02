@@ -22,3 +22,9 @@ Toutes les fonctions de l'ast Matcher
 
 http://releases.llvm.org/3.5.0/tools/clang/docs/LibASTMatchersReference.html
 
+https://github.com/debamitro/try-clang-ast-matcher/blob/master/test.cpp
+
+https://jonasdevlieghere.com/understanding-the-clang-ast/#astmatchers
+
+http://clang.llvm.org/docs/LibASTMatchersTutorial.html
+
