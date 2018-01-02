@@ -48,6 +48,7 @@ DeclarationMatcher FunctionDefMatcher =
 StatementMatcher FunctionCallMatcher =
     declRefExpr(isExpansionInMainFile()).bind("FunctionCall");
 
+StatementMatcher LoopMatcher = forStmt().bind("forLoop");
 
 /******************************/
 /** Définitions des matchers **/
@@ -75,6 +76,17 @@ public:
             }
         }
     }
+};
+
+class LoopPrinter : public MatchFinder::MatchCallback {
+public :
+  virtual void run(const MatchFinder::MatchResult &Result) {
+    if (const ForStmt *FS = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop"))
+    {
+    	std::cout<<"Boucle for"<<std::endl;
+      //FS->dump();
+    }
+  }
 };
 
 /*
@@ -145,6 +157,9 @@ int main(int argc, const char **argv) {
 
     FunctionCall FunctionCallFinder;
     Finder.addMatcher(FunctionCallMatcher, &FunctionCallFinder);
+
+    LoopPrinter LoopPrinterFinder;
+    Finder.addMatcher(LoopMatcher,&LoopPrinterFinder);
 
     // Lance l'analyse préprocesseur (pour l'analyse de toutes les directives préprocesseurs)
     int preprocessor_error = Tool.run(newFrontendActionFactory<PreprocessorMatchingAction>().get());
