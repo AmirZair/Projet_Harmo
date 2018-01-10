@@ -1,10 +1,3 @@
-/****************************************************************************************
-*               Exemples simples d'utilisation d'AST matcher avec clang                 *
-*                                                                                       *
-* Author: Valentin Bouquet                                                              *
-*                                                                                       *                            *
-****************************************************************************************/
-
 // Clang librairies
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Frontend/CompilerInstance.h"
@@ -36,6 +29,12 @@ using namespace clang::ast_matchers;
 int ERROR_PREPROCESSOR_ANALYSIS = 1;
 int ERROR_AST_ANALYSIS = 2;
 
+/*Liste de fonction perso*/
+
+static bool areSameVariable(const ValueDecl *First, const ValueDecl *Second) {
+    return First && Second && First->getCanonicalDecl() == Second->getCanonicalDecl();
+}
+
 /***************************/
 /** Liste des matchers    **/
 /***************************/
@@ -48,7 +47,13 @@ DeclarationMatcher FunctionDefMatcher =
 StatementMatcher FunctionCallMatcher =
     declRefExpr(isExpansionInMainFile()).bind("FunctionCall");
 
-StatementMatcher LoopMatcher = forStmt().bind("forLoop");
+/*StatementMatcher LoopMatcher = forStmt(hasLoopInit(declStmt(hasSingleDecl(varDecl().bind("initVar")))),
+  hasCondition(binaryOperator(hasLHS(ignoringParenImpCasts(declRefExpr(to(varDecl().bind("condVar"))))))),
+  hasIncrement(unaryOperator(hasUnaryOperand(declRefExpr(to(varDecl().bind("incVar"))))))
+  ).bind("loop");*/
+
+StatementMatcher forLoopMatcher = forStmt(hasDescendant(forStmt().bind("f"))).bind("forLoop");
+
 
 /******************************/
 /** Définitions des matchers **/
@@ -78,16 +83,24 @@ public:
     }
 };
 
-class LoopPrinter : public MatchFinder::MatchCallback {
+/*class LoopPrinter : public MatchFinder::MatchCallback {
 public :
   virtual void run(const MatchFinder::MatchResult &Result) {
-    if (const ForStmt *FS = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop"))
-    {
-    	std::cout<<"Boucle for"<<std::endl;
-      //FS->dump();
-    }
+    if (const ForStmt *FS = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop1"))
+        std::cout<<"Boucle for"<<std::endl;
   }
+};*/
+
+class MyPrinter : public MatchFinder::MatchCallback {
+public:
+    virtual void run(const MatchFinder::MatchResult &Result) {
+      if(const ForStmt *F = Result.Nodes.getNodeAs<clang::ForStmt>("forLoop")){
+        std::cout<<"Boucle for"<<std::endl;
+        }
+      }
 };
+
+
 
 /*
 Définie les "matchers" pour les éléments du preprocesseur.
@@ -158,8 +171,11 @@ int main(int argc, const char **argv) {
     FunctionCall FunctionCallFinder;
     Finder.addMatcher(FunctionCallMatcher, &FunctionCallFinder);
 
-    LoopPrinter LoopPrinterFinder;
-    Finder.addMatcher(LoopMatcher,&LoopPrinterFinder);
+    MyPrinter l;
+    Finder.addMatcher(forLoopMatcher,&l);
+
+    //Looptest l;
+    //Finder.addMatcher(testFor,&l);
 
     // Lance l'analyse préprocesseur (pour l'analyse de toutes les directives préprocesseurs)
     int preprocessor_error = Tool.run(newFrontendActionFactory<PreprocessorMatchingAction>().get());
