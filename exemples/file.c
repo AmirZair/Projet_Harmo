@@ -121,6 +121,25 @@ void tri_cocktail( int *tab, int taille)
     }
 }
 
+void gnome_sort(int *tab,int taille)
+{
+	int i=0,temp;
+	while (i<taille)
+	{
+		if (i==0 || tab[i]>=tab[i-1])
+		{
+			i=i+1;
+		}
+		else{
+			temp=tab[i];
+			tab[i]=tab[i-1];
+			tab[i-1]=temp;
+			i=i-1;
+		}
+	}
+}
+
+
 int main(int argc, char *argv[]) {
     int a=1, b=2;
 
