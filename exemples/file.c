@@ -80,6 +80,47 @@ void tri_rapide(int *tab,int debut, int pivot, int fin)
 	tri_rapide(tab,j+1,(j+fin)/2,fin);}
 }
 
+void tri_cocktail( int *tab, int taille)
+{
+    int i, j, tmp;
+    int stop;
+    i = 0;
+    do{
+
+        stop = 1;
+
+        for(j=0; j<taille-i-1; j++)
+        {
+            if( tab[j] > tab[j+1])
+            {
+                tmp = tab[j+1];
+                tab[j+1] = tab[j];
+                tab[j] = tmp;
+
+                stop = 0;
+            }
+        }
+
+        if( stop)
+        {
+            break;
+        }
+
+        stop = 1;
+
+        for(j=n-2-i; j>i; j--)
+        {
+            if( tab[j-1] > tab[j])
+            {
+                tmp = tab[j];
+                tab[j] = tab[j-1];
+                tab[j-1] = tmp;
+            }
+        }
+
+    }
+}
+
 int main(int argc, char *argv[]) {
     int a=1, b=2;
 
