@@ -91,6 +91,8 @@ void tri_cocktail( int *tab, int taille)
 	    {
 		if( tab[j] > tab[j+1])
 		{
+
+			
 			tmp = tab[j+1];
 			tab[j+1] = tab[j];
 			tab[j] = tmp;
@@ -136,6 +138,83 @@ void gnome_sort(int *tab,int taille)
 		}
 	}
 }
+
+void tri_max(int *tab, int taille)
+{
+	int i,max;
+	max=tab[0];
+	for(i=1; i < taille; i++)
+	{
+		if (tab[i]>max)
+		{
+			max=tab[i];
+
+		}
+	}
+	return max;
+}
+
+void tri_min(int *tab, int taille)
+{
+	int i,min;
+	min=tab[0];
+	for(i=1; i < taille; i++)
+	{
+		if (tab[i]<min)
+		{
+			min=tab[i];
+
+		}
+	}
+	return max;
+}
+
+
+fusion1(int *A, int d1,int f1,int d2,int f2);
+
+void tri_fusion(int *t, int deb,int fin) {
+	int tmp;
+if((fin-deb) <= 0) return;
+if((fin-deb) == 1) {
+    if(t[fin]<=t[deb]) {
+        tmp = t[fin];
+        t[fin]=t[deb];
+        t[deb]=tmp;
+    }
+    return;
+}
+//Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
+int d1 = deb;
+int f1 = (fin-deb)/2;
+int d2 = (fin-deb)/2+1;
+int f2 = fin;
+tri_fusion(t, d1, f1);
+tri_fusion(t, d2, f2);
+fusion1(t, d1, f1, d2, f2);
+return;
+}
+
+*/
+
+
+void decroissant (int *tab, int taille)
+{
+	int i,j, tmp;
+	for(i = 0; i < taille-1; i++)
+	{
+		for (j = 0; j < taille-1; j++)
+		{
+			if(tab[j] < tab[j+1])
+			{
+				tmp = tab[j];
+				tab[j] = tab[j+1];
+				tab[j+1] = tmp;
+			}
+		}
+	}
+}
+
+
 
 
 int main(int argc, char *argv[]) {
