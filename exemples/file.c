@@ -139,7 +139,31 @@ void tri_gnome(int *tab,int taille)
 	}
 }
 
-
+fusion1(int *A, int d1,int f1,int d2,int f2);
+ 
+ void tri_fusion(int *t, int deb,int fin) {
+ 	int tmp;
+ if((fin-deb) <= 0) return;
+ if((fin-deb) == 1) {
+     if(t[fin]<=t[deb]) {
+         tmp = t[fin];
+         t[fin]=t[deb];
+         t[deb]=tmp;
+     }
+     return;
+ }
+ fusion1(int *A, int d1,int f1,int d2,int f2){
+ //Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
+ int d1 = deb;
+ int f1 = (fin-deb)/2;
+ int d2 = (fin-deb)/2+1;
+ int f2 = fin;
+ tri_fusion(t, d1, f1);
+ tri_fusion(t, d2, f2);
+ fusion1(t, d1, f1, d2, f2);
+ return;
+ }
+	 
 int *remplir_aleatoirement_int(int n) {
 	int *t = malloc(n*sizeof(*t));
 	int i;
