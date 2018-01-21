@@ -170,7 +170,7 @@ void tri_min(int *tab, int taille)
 }
 
 
-fusion1(int *A, int d1,int f1,int d2,int f2);
+
 
 void tri_fusion(int *t, int deb,int fin) {
 	int tmp;
@@ -183,6 +183,8 @@ if((fin-deb) == 1) {
     }
     return;
 }
+
+fusion1(int *A, int d1,int f1,int d2,int f2){
 //Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
 int d1 = deb;
 int f1 = (fin-deb)/2;
