@@ -308,3 +308,6 @@ int main(int argc, char *argv[]) {
     compare_tris(100000);
     return 0;
 }
+
+// build/clang_ast_matcher exemples/file.c -- -I/home/l3c/Bureau/P/Projet_Harmo/libs/clang_llvm/lib/clang/3.9.1/include
+
