@@ -121,7 +121,7 @@ void tri_cocktail( int *tab, int taille)
 }
 
 
-void gnome_sort(int *tab,int taille)
+void tri_gnome(int *tab,int taille)
 {
 	int i=0,temp;
 	while (i<taille)
@@ -184,7 +184,7 @@ if((fin-deb) == 1) {
     return;
 }
 
-fusion1(int *A, int d1,int f1,int d2,int f2){
+void fusion1(int *A, int d1,int f1,int d2,int f2){
 //Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
 int d1 = deb;
 int f1 = (fin-deb)/2;
