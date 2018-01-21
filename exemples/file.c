@@ -151,7 +151,6 @@ void tri_max(int *tab, int taille)
 
 		}
 	}
-	return max;
 }
 
 void tri_min(int *tab, int taille)
@@ -166,9 +165,7 @@ void tri_min(int *tab, int taille)
 
 		}
 	}
-	return max;
 }
-
 
 
 
