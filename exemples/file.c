@@ -3,9 +3,9 @@
 #include <time.h>
 
 void tri_bulle(int *tab, int taille) {
-	int  tmp;
-  	 for (int i = 0; i < taille-1; i++)      
-       for (int j = 0; j < taille-i-1; j++) 
+	int  tmp,i,j;
+  	 for (i = 0; i < taille-1; i++)      
+       for (j = 0; j < taille-i-1; j++) 
            if (tab[j] > tab[j+1])
               {
               	tmp = tab[j];
@@ -91,8 +91,6 @@ void tri_cocktail( int *tab, int taille)
 	    {
 		if( tab[j] > tab[j+1])
 		{
-
-			
 			tmp = tab[j+1];
 			tab[j+1] = tab[j];
 			tab[j] = tmp;
@@ -139,85 +137,73 @@ void tri_gnome(int *tab,int taille)
 	}
 }
 
-void tri_max(int *tab, int taille)
-{
-	int i,max;
-	max=tab[0];
-	for(i=1; i < taille; i++)
-	{
-		if (tab[i]>max)
-		{
-			max=tab[i];
 
-		}
+int *remplir_aleatoirement_int(int n) {
+	int *t = malloc(n*sizeof(*t));
+	int i;
+	for(i=0;i<n;i++) {
+		t[i]=rand()%(3*n);
 	}
+	return t;
 }
 
-void tri_min(int *tab, int taille)
-{
-	int i,min;
-	min=tab[0];
-	for(i=1; i < taille; i++)
-	{
-		if (tab[i]<min)
-		{
-			min=tab[i];
-
-		}
-	}
+double tri_selection_mesure(int taille, int *tab) {
+	clock_t a = clock();
+	//printf("a = %f\n",a);
+	tri_selection(tab,taille);
+	//printf("¨fin : %.6f\n",clock());
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
 
+double selection_recursif_mesure(int taille, int *tab) {
+	clock_t start_t;
+	start_t = clock();
+	selection_recursif(tab,taille);
 
-void tri_fusion(int *t, int deb,int fin) {
-	int tmp;
-if((fin-deb) <= 0) return;
-if((fin-deb) == 1) {
-    if(t[fin]<=t[deb]) {
-        tmp = t[fin];
-        t[fin]=t[deb];
-        t[deb]=tmp;
-    }
-    return;
-}
-
-void fusion1(int *A, int d1,int f1,int d2,int f2){
-//Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
-int d1 = deb;
-int f1 = (fin-deb)/2;
-int d2 = (fin-deb)/2+1;
-int f2 = fin;
-tri_fusion(t, d1, f1);
-tri_fusion(t, d2, f2);
-fusion1(t, d1, f1, d2, f2);
-return;
+	return (clock()-start_t+0.)/CLOCKS_PER_SEC;
 }
 
 
-void decroissant (int *tab, int taille)
-{
-	int i,j, tmp;
-	for(i = 0; i < taille-1; i++)
-	{
-		for (j = 0; j < taille-1; j++)
-		{
-			if(tab[j] < tab[j+1])
-			{
-				tmp = tab[j];
-				tab[j] = tab[j+1];
-				tab[j+1] = tmp;
-			}
-		}
-	}
+double tri_bulle_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_a_bulle(tab,n);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
+}
+
+double tri_insertion_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_insertion(tab,n);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
 
+double tri_rapide_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_rapide(tab,0,n/2,n);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
+}
 
+void compare_tris(int taille) {
+	int *t, u[taille], v[taille], i, faux;
+	t=remplir_aleatoirement_int(taille);
+	for(i=0;i<taille;i++) u[i]=v[i]=t[i];
+	printf("Tri par sélection de %d entiers : %.2f\n",taille,tri_selection_mesure(taille,u));
+	printf("Tri par insertion de %d entiers : %.2f\n",taille,tri_insertion_mesure(taille,v));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
+	printf("Tri à bulle de %d entiers : %.2f\n",taille,tri_bulle_mesure(taille,u));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
+	printf("Tri rapide de %d entiers : %.2f\n",taille,tri_rapide_mesure(taille,u));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
+	free(t);
+}
 
 int main(int argc, char *argv[]) {
-    int a=1, b=2;
+    
+    compare_tris(10000);
 
     return 0;
 }
-
-// build/clang_ast_matcher exemples/file.c -- -I/home/l3c/Bureau/P/Projet_Harmo/libs/clang_llvm/lib/clang/3.9.1/include
