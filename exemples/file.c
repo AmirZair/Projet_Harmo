@@ -139,31 +139,41 @@ void tri_gnome(int *tab,int taille)
 	}
 }
 
-fusion1(int *A, int d1,int f1,int d2,int f2);
  
- void tri_fusion(int *t, int deb,int fin) {
- 	int tmp;
- if((fin-deb) <= 0) return;
- if((fin-deb) == 1) {
-     if(t[fin]<=t[deb]) {
-         tmp = t[fin];
-         t[fin]=t[deb];
-         t[deb]=tmp;
-     }
-     return;
- }
- fusion1(int *A, int d1,int f1,int d2,int f2){
- //Si pair : (f-d)/2        Si impair : (f-d)/2 + 1
- int d1 = deb;
- int f1 = (fin-deb)/2;
- int d2 = (fin-deb)/2+1;
- int f2 = fin;
- tri_fusion(t, d1, f1);
- tri_fusion(t, d2, f2);
- fusion1(t, d1, f1, d2, f2);
- return;
- }
-	 
+void merge(int a[], int low, int mid, int high)
+{
+    int b[10000];
+    int i = low, j = mid + 1, k = 0;
+  
+    while (i <= mid && j <= high) {
+        if (a[i] <= a[j])
+            b[k++] = a[i++];
+        else
+            b[k++] = a[j++];
+    }
+    while (i <= mid)
+        b[k++] = a[i++];
+  
+    while (j <= high)
+        b[k++] = a[j++];
+  
+    k--;
+    while (k >= 0) {
+        a[low + k] = b[k];
+        k--;
+    }
+}
+  
+void tri_fusion(int a[], int low, int high)
+{
+    if (low < high) {
+        int m = (high + low)/2;
+        tri_fusion(a, low, m);
+        tri_fusion(a, m + 1, high);
+        merge(a, low, m, high);
+    }
+}
+
 int *remplir_aleatoirement_int(int n) {
 	int *t = malloc(n*sizeof(*t));
 	int i;
@@ -262,6 +272,12 @@ double tri_gnome_mesure(int n, int *tab) {
 	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
+double tri_fusion_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_fusion(tab,0,n-1);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
+}
+
 void compare_tris(int taille) {
 	int *t, u[taille], v[taille], i, faux;
 	t=remplir_aleatoirement_int(taille);
@@ -282,11 +298,13 @@ void compare_tris(int taille) {
 	printf("Tri rapide de %d entiers : %.2f\n",taille,tri_rapide_mesure(taille,u));
 	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
 	if(faux) printf("faux\n");
+	printf("Tri fusion de %d entiers : %.2f\n",taille,tri_fusion_mesure(taille,u));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
 	free(t);
 }
 
 int main(int argc, char *argv[]) {
-    
-    compare_tris(200000);
+    compare_tris(100000);
     return 0;
 }
