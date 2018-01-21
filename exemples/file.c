@@ -113,8 +113,10 @@ void tri_cocktail( int *tab, int taille)
 		    stop = 0;
 		}
 	    }
-	    if(stop == 1)
-		break;
+	    if(stop==1)
+	    	break;
+	    else
+	    	stop=1;
     }while(stop);
 }
 
@@ -159,7 +161,7 @@ double tri_selection_mesure(int taille, int *tab) {
 double selection_recursif_mesure(int taille, int *tab) {
 	clock_t start_t;
 	start_t = clock();
-	selection_recursif(tab,taille);
+	tri_selection_recursif(tab,taille);
 
 	return (clock()-start_t+0.)/CLOCKS_PER_SEC;
 }
@@ -167,7 +169,7 @@ double selection_recursif_mesure(int taille, int *tab) {
 
 double tri_bulle_mesure(int n, int *tab) {
 	clock_t a = clock();
-	tri_a_bulle(tab,n);
+	tri_bulle(tab,n);
 	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
@@ -177,10 +179,62 @@ double tri_insertion_mesure(int n, int *tab) {
 	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
+void swap(int *x,int *y)
+{
+    int temp;
+    temp = *x;
+    *x = *y;
+    *y = temp;
+}
+ 
+int choose_pivot(int i,int j )
+{
+    return((i+j) /2);
+}
+ 
+void quicksort(int list[],int m,int n)
+{
+    int key,i,j,k;
+    if( m < n)
+    {
+        k = choose_pivot(m,n);
+        swap(&list[m],&list[k]);
+        key = list[m];
+        i = m+1;
+        j = n;
+        while(i <= j)
+        {
+            while((i <= n) && (list[i] <= key))
+                i++;
+            while((j >= m) && (list[j] > key))
+                j--;
+            if( i < j)
+                swap(&list[i],&list[j]);
+        }
+        /* swap two elements */
+        swap(&list[m],&list[j]);
+ 
+        /* recursively sort the lesser list */
+        quicksort(list,m,j-1);
+        quicksort(list,j+1,n);
+    }
+}
 
 double tri_rapide_mesure(int n, int *tab) {
 	clock_t a = clock();
-	tri_rapide(tab,0,n/2,n);
+	quicksort(tab,0,n-1);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
+}
+
+double tri_cocktail_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_cocktail(tab,n);
+	return (clock()-a+0.)/CLOCKS_PER_SEC;
+}
+
+double tri_gnome_mesure(int n, int *tab) {
+	clock_t a = clock();
+	tri_gnome(tab,n);
 	return (clock()-a+0.)/CLOCKS_PER_SEC;
 }
 
@@ -195,6 +249,12 @@ void compare_tris(int taille) {
 	printf("Tri à bulle de %d entiers : %.2f\n",taille,tri_bulle_mesure(taille,u));
 	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
 	if(faux) printf("faux\n");
+	printf("Tri cocktail de %d entiers : %.2f\n",taille,tri_cocktail_mesure(taille,u));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
+	printf("Tri gnome de %d entiers : %.2f\n",taille,tri_gnome_mesure(taille,u));
+	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
+	if(faux) printf("faux\n");
 	printf("Tri rapide de %d entiers : %.2f\n",taille,tri_rapide_mesure(taille,u));
 	for(faux=i=0;i<taille;i++) faux|=u[i]-v[i], u[i]=t[i];
 	if(faux) printf("faux\n");
@@ -203,7 +263,6 @@ void compare_tris(int taille) {
 
 int main(int argc, char *argv[]) {
     
-    compare_tris(10000);
-
+    compare_tris(200000);
     return 0;
 }
