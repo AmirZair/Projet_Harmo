@@ -194,8 +194,6 @@ fusion1(t, d1, f1, d2, f2);
 return;
 }
 
-*/
-
 
 void decroissant (int *tab, int taille)
 {
