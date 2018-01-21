@@ -52,7 +52,9 @@ StatementMatcher FunctionCallMatcher =
   hasIncrement(unaryOperator(hasUnaryOperand(declRefExpr(to(varDecl().bind("incVar"))))))
   ).bind("loop");*/
 
-StatementMatcher forLoopMatcher = forStmt(hasDescendant(forStmt().bind("f"))).bind("forLoop");
+StatementMatcher forLoopMatcher = forStmt(hasLoopInit(declStmt(
+                hasSingleDecl(varDecl(hasInitializer(integerLiteral(equals(0))))
+                                  .bind("initVarName")))),hasDescendant(forStmt().bind("f"))).bind("forLoop");
 
 
 /******************************/
